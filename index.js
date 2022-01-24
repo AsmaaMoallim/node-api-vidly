@@ -2,6 +2,9 @@ const Joi = require("joi");
 const express = require("express");
 const app = express();
 
+// json middleware 
+app.use(express.json())
+
 // validiation function using joi
 function validateGenre(genre) {
   const schema = Joi.object({
