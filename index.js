@@ -2,8 +2,8 @@ const Joi = require("joi");
 const express = require("express");
 const app = express();
 
-// json middleware 
-app.use(express.json())
+// json middleware
+app.use(express.json());
 
 // validiation function using joi
 function validateGenre(genre) {
@@ -34,7 +34,7 @@ const genres = [
 ];
 
 // get method
-app.get("/" || "/vidly.com", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Welcome to Vidly");
 });
 
@@ -44,7 +44,7 @@ app.get("/vidly.com/api/genres", (req, res) => {
 
 app.get("/vidly.com/api/genres/:id", (req, res) => {
   const genre = genres.find((g) => g.id === parseInt(req.params.id));
-  if (!genre) return res.status(400).res.send("this genre does not exist");
+  if (!genre) return res.status(400).send("this genre does not exist");
 
   res.send(genre);
 });
@@ -66,7 +66,7 @@ app.post("/vidly.com/api/genres", (req, res) => {
 app.put("/vidly.com/api/genres/:id", (req, res) => {
   const genre = genres.find((g) => g.id === parseInt(req.params.id));
   if (!genre)
-    return res.status(400).res.send("you updating a genre that does not exist");
+    return res.status(400).send("you updating a genre that does not exist");
 
   const { error } = validateGenre(req.body);
   if (error) return res.status(400).send(error.message);
@@ -75,13 +75,14 @@ app.put("/vidly.com/api/genres/:id", (req, res) => {
   res.send(genre);
 });
 
-// delete method 
+// delete method
 app.delete("/vidly.com/api/genres/:id", (req, res) => {
   const genre = genres.find((g) => g.id === parseInt(req.params.id));
-  if (!genre) return res.status(400).res.send("you deleting a genre that does not exist");
+  if (!genre)
+    return res.status(400).send("you deleting a genre that does not exist");
 
   const indexOfGenre = genres.indexOf(genre);
-  genres.splice(indexOfGenre,1);
+  genres.splice(indexOfGenre, 1);
   res.send(genre);
 });
 
