@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 const exprees = require("express");
 const { Movie } = require("../models/movie");
 const { Customer } = require("../models/customer");
-const { Rental , validate } = require("../models/rental");
+const {
+  Rental,
+  validate,
+} = require("../trash_files/rental-my-rental-modle-old");
 const router = exprees.Router();
 
 // get all method
@@ -23,7 +26,7 @@ router.get("/:id", async (req, res) => {
 // post method
 router.post("/", async (req, res) => {
   const { error } = await validate(req.body);
-  if (error) return res.status(400).send("Rental does not exixt.. ");
+  if (error) return res.status(400).send(error.details[0].message);
 
   // make sure the customer id is an actual one ... in the genre collection
   const customer = await Customer.findById(req.body.customerId);
@@ -33,16 +36,20 @@ router.post("/", async (req, res) => {
   const movie = await Movie.findById(req.body.movieId);
   if (!movie) return res.status(400).send("invalid movie...");
 
+  if (movie.numberInStock === 0)
+    return res.status(400).send("Movie not in stock.");
+
   const rental = new Rental({
     customer: {
       _id: customer._id,
-      name: customer.name, 
+      name: customer.name,
+      phone: customer.phone,
     },
     movie: {
-      _id: movie._id, 
-      name: movie.title, 
+      _id: movie._id,
+      title: movie.title,
+      dailyRentalRate: movie.dailyRentalRate,
     },
-    price: req.body.price,
   });
 
   const result = await rental.save();
@@ -55,18 +62,27 @@ router.put("/:id", async (req, res) => {
   const { error } = await validate(req.body);
   if (error) return res.status(400).send("Rental does not exixt.. ");
 
+  // make sure the customer id is an actual one ... in the genre collection
+  const customer = await Customer.findById(req.body.customerId);
+  if (!customer) return res.status(400).send("invalid customer...");
+
+  // make sure the movie id is an actual one ... in the genre collection
+  const movie = await Movie.findById(req.body.movieId);
+  if (!movie) return res.status(400).send("invalid movie...");
+
   const rental = await Rental.findByIdAndUpdate(
     { _id: id },
     {
       customer: {
         _id: customer._id,
         name: customer.name,
+        phone: customer.phone,
       },
       movie: {
         _id: movie._id,
-        name: movie.title,
+        title: movie.title,
+        dailyRentalRate: movie.dailyRentalRate,
       },
-      price: req.body.price,
     },
     { new: true }
   );
