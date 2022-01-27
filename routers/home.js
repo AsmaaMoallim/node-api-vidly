@@ -6,4 +6,5 @@ router.get("", (req, res) => {
   res.send("Welcome to Vidly");
 });
 
+
 module.exports = router;
