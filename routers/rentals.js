@@ -50,6 +50,15 @@ router.post("/", async (req, res) => {
   });
 
   const result = await rental.save();
+
+  /*  we need a transicton here ... mongo have something called twoface commit .. it is not in this course 
+
+  movie.numberInStock--;
+  movie.save()
+
+  */
+
+
   if (!result) return res.status(400).send("Some Error occured");
   res.send(result);
 });
