@@ -3,6 +3,14 @@ const router = express.Router();
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
+// coonnecting to the mongodb
+mongoose
+  .connect("mongodb://localhost/vidly")
+  .then(() => console.log("Connected to mongodb..."))
+  .catch((err) =>
+    console.error("Failed to connect to mongodb...\n ", err.message)
+  );
+
 // defining the schema
 const genreSchema = mongoose.Schema({
   genreName: {
