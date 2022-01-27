@@ -2,10 +2,7 @@ const mongoose = require("mongoose");
 const exprees = require("express");
 const { Movie } = require("../models/movie");
 const { Customer } = require("../models/customer");
-const {
-  Rental,
-  validate,
-} = require("../trash_files/rental-my-rental-modle-old");
+const { Rental, validate } = require("../models/rental");
 const router = exprees.Router();
 
 // get all method
