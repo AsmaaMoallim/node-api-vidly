@@ -1,6 +1,5 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
-
 const rentalSchema = new mongoose.Schema({
   customer: {
     type: new mongoose.Schema({
@@ -59,8 +58,10 @@ const Rental = mongoose.model("Rental", rentalSchema);
 
 async function validateRental(rental) {
   const rentalSechma = Joi.object({
-    customerId: Joi.string().required(),
-    movieId: Joi.string().required(),
+    // customerId: Joi.string().required(),
+    // movieId: Joi.string().required(),
+    customerId: Joi.objectId().required(),   // validating fusing joi-objectid packeage
+    movieId: Joi.objectId().required(),
   });
 
   return rentalSechma.validate(rental);

@@ -37,9 +37,10 @@ router.post("/", async (req, res) => {
     dailyRentalRate: req.body.dailyRentalRate,
   });
 
-  const result = await movie.save();
-  if (!result) return res.status(400).send("Some Error occured");
-  res.send(result);
+  // const result = await movie.save();
+  await movie.save(); // we do not need to store it again to get the id !! because the ide is already set before saving
+  // if (!result) return res.status(400).send("Some Error occured");
+  res.send(movie);
 });
 
 // put method

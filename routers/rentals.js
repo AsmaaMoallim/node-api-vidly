@@ -4,6 +4,12 @@ const { Movie } = require("../models/movie");
 const { Customer } = require("../models/customer");
 const { Rental, validate } = require("../models/rental");
 const router = exprees.Router();
+const Fawn = require("fawn");
+
+
+Fawn.init("mongodb://localhost/vidly");  // this is the new way of initilising 
+// Fawn.init(mongoose); // for handelling transictions
+
 
 // get all method
 router.get("/", async (req, res) => {
@@ -48,19 +54,30 @@ router.post("/", async (req, res) => {
       dailyRentalRate: movie.dailyRentalRate,
     },
   });
+  try {
+    new Fawn.Task()
+      .save("rentals", rental) // we pass the collection name and the new rental object
+      .update(
+        { _id: movie.id },
+        {
+          $inc: { numberInStock: -1 }, // decreament by one
+        }
+      )
+      .run(); // none will be breformed unless this function is called
 
-  const result = await rental.save();
+    res.send(result);
+  } catch (ex) {
+    res.status(500).send("something went baaaad: ", ex.message);
+  }
 
   /*  we need a transicton here ... mongo have something called two-phase commit .. it is not in this course 
 
+  1- rental.save()
+  ----
   movie.numberInStock--;
-  movie.save()
+  2- movie.save()
 
   */
-
-
-  if (!result) return res.status(400).send("Some Error occured");
-  res.send(result);
 });
 
 // put method

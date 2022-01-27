@@ -28,9 +28,9 @@ router.post("/", async (req, res) => {
     isGold: req.body.isGold,
   });
 
-  const result = await customer.save();
-  if (!result) return res.status(400).send(" Error: ", error.message);
-  res.send(result);
+  await customer.save();
+  // if (!result) return res.status(400).send(" Error: ", error.message);
+  res.send(customer);
 });
 
 // put method one

@@ -35,7 +35,8 @@ async function validateMovie(movie) {
     // genre: Joi.custom((value) => {
     //   validate(value);
     // }),
-    genreId: Joi.string().required(), // because we want the clint to only send an id not a genra object
+    // genreId: Joi.string().required(), // because we want the clint to only send an id not a genra object
+    genreId: Joi.objectId().required(),
     numberInStock: Joi.number(),
     dailyRentalRate: Joi.number(),
   });
