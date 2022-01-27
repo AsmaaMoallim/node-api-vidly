@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
 
   const result = await rental.save();
 
-  /*  we need a transicton here ... mongo have something called twoface commit .. it is not in this course 
+  /*  we need a transicton here ... mongo have something called two-phase commit .. it is not in this course 
 
   movie.numberInStock--;
   movie.save()
