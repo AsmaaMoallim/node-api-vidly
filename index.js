@@ -2,6 +2,7 @@ const express = require("express");
 const home = require("./routers/home");
 const genres = require("./routers/genres");
 const customers = require("./routers/customers");
+const movies = require("./routers/movies");
 const app = express();
 const mongoose = require("mongoose");
 
@@ -13,11 +14,12 @@ mongoose
     console.error("Failed to connect to mongodb...\n ", err.message)
   );
 
-// json middleware
+// middlewares
 app.use(express.json());
 app.use("/", home);
 app.use("/vidly.com/api/genres", genres);
 app.use("/vidly.com/api/customer", customers);
+app.use("/vidly.com/api/movies", movies);
 
 // listening to port
 const port = process.env.PORT || 5000;
