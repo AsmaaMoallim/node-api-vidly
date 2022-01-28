@@ -8,7 +8,7 @@ function auth(req, res, next) {
   try {
     const decoded = jwt.verify(token, config.get("jwtTokenSecret")); // this returns the payload or throws an error
      req.user = decoded;  // put it in the request.. to be proccesed by the next rout handeler
-    next();
+     next();
   } catch (ex) {
     res.status(400).send("invalid token");
   }

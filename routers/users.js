@@ -1,3 +1,4 @@
+const auth = require("../middlewares/auth");
 const bcrypt = require("bcrypt");
 const { User, validate } = require("../models/user");
 const mongoose = require("mongoose");
@@ -7,18 +8,26 @@ const lodash = require("lodash");
 
 // get method all
 router.get("/", async (req, res) => {
-  const users = await User.find().sort("name");
+  const users = await User.find().sort("name").select({ password: -1 });
   if (!users || users.length == 0)
     return res.status(404).send("No users exixt.. ");
   res.send(users);
 });
 
-// // get method one
-// router.get("/:id", async (req, res) => {
-//   const user = await User.find({ _id: req.params.id });
-//   if (!user || user.length==0) return res.status(404).send("User does not exixt.. ");
-//   res.send(user);
-// });
+// get method one
+router.get("/:id", async (req, res) => {
+  const user = await User.findById( req.params.id );
+  if (!user || user.length==0) return res.status(404).send("User does not exixt.. ");
+  res.send(user);
+});
+
+// get method : current user
+router.get("/user/me", auth, async (req, res) => {
+  const user = await User.findById(req.user._id).select({password:0});
+  if (!user || user.length == 0)
+    return res.status(404).send("User does not exixt.. ");
+  res.send(user);
+});
 
 // post method one
 router.post("/", async (req, res) => {
