@@ -1,0 +1,3 @@
+{
+    "jwtTokenSecret" : "JWT_Secret_Key" 
+}

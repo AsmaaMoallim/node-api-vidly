@@ -1,3 +1,4 @@
+const config = require("config")
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User, validatePass } = require("../models/user");
@@ -17,14 +18,14 @@ router.post("/", async (req, res) => {
   if (!user) return res.status(400).send(" Invalid email.. ");
 
   const validPass = await bcrypt.compare(req.body.password, user.password);
-//   if (!validPass) return res.status(400).send(" Invalid email or password.. ");
+  //   if (!validPass) return res.status(400).send(" Invalid email or password.. ");
   if (!validPass) return res.status(400).send(" Invalid password.. ");
 
-  const token = jwt.sign({_id : user._id}, "jwtSecretKey") // the key should  be an environment variable and obtined in the configuration file.. and not should be stored in the source code just like the database pass word .. or any other secret data 
-  
-  res.send(token);
-});
+  //   const token = jwt.sign({_id : user._id}, "jwtSecretKey") // the key should  be an environment variable and obtined in the configuration file.. and not should be stored in the source code just like the database pass word .. or any other secret data
+  const token = jwt.sign({ _id: user._id }, config.get("jwtTokenSecret")); 
 
+  res.send(token);
+})
 
 function validate(user) {
   const userSchema = Joi.object({

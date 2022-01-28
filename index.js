@@ -1,3 +1,4 @@
+const config = require("config")
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const express = require("express");
@@ -11,13 +12,18 @@ const auth = require("./routers/auth");
 const app = express();
 const mongoose = require("mongoose");
 
-// coonnecting to the mongodb
-mongoose
-  .connect("mongodb://localhost/vidly")
-  .then(() => console.log("Connected to mongodb..."))
-  .catch((err) =>
-    console.error("Failed to connect to mongodb...\n ", err.message)
-  );
+// if configeration variable is not define then catch the error
+if (!config.get("jwtTokenSecret")){
+  console.log("Token Secret : jwtTokenSecret is not defined..");
+  process.exit(1)  // exit the node or nodemon by ending the process and application wonit response
+}
+  // coonnecting to the mongodb
+  mongoose
+    .connect("mongodb://localhost/vidly")
+    .then(() => console.log("Connected to mongodb..."))
+    .catch((err) =>
+      console.error("Failed to connect to mongodb...\n ", err.message)
+    );
 
 // middlewares
 app.use(express.json());
