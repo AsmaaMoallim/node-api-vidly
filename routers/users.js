@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
   //   password: req.body.password,
   // });
 
-  user = new User(lodash.pick(req.body, ["name", "email", "password"]));
+  user = new User(lodash.pick(req.body, ["name", "email", "password","isAdmin"]));
   user.password = await bcrypt.hash(user.password, 10);
   await user.save();
 

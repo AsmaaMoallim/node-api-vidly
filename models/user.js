@@ -4,6 +4,7 @@ const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
 const mongoose = require("mongoose");
+const { boolean } = require("joi");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -25,11 +26,18 @@ const userSchema = new mongoose.Schema({
     maxlength: 1024,
     require: true,
   },
+  isAdmin : {
+    type: Boolean,
+    default : false
+  },
 });
 
 // this a the shabe of the user object that is modeled
 userSchema.methods.generateUserToken = function () {
-  const token = jwt.sign({ _id: this._id }, config.get("jwtTokenSecret"));
+  const token = jwt.sign(
+    { _id: this._id, isAdmin: this.isAdmin },
+    config.get("jwtTokenSecret")
+  );
   return token;
 };
 
@@ -45,6 +53,7 @@ function validateUser(user) {
       .max(10)
       .required()
       .custom(validatePassword, "wrong password"),
+    isAdmin: Joi.boolean().default(false),
   });
   return userSchema.validate(user);
 }
