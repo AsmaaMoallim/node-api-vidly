@@ -1,3 +1,4 @@
+const auth = require("../middlewares/auth");
 const mongoose = require("mongoose");
 const exprees = require("express");
 const { Movie, validate } = require("../models/movie");
@@ -14,12 +15,12 @@ router.get("/", async (req, res) => {
 // get one method
 router.get("/:id", async (req, res) => {
   const movie = await Movie.findById(req.params.id);
-  if (!movie ) return res.status(400).send("Movie does not exixt.. ");
+  if (!movie) return res.status(400).send("Movie does not exixt.. ");
   res.send(movie);
 });
 
 // post method
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = await validate(req.body);
   if (error) return res.status(400).send("Movie does not exixt.. ");
 
@@ -44,7 +45,7 @@ router.post("/", async (req, res) => {
 });
 
 // put method
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { error } = await validate(req.body);
   if (error) return res.status(400).send("Movie does not exixt.. ");
 
@@ -71,7 +72,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // delete  method
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   const movie = await Movie.findByIdAndRemove({ _id: req.params.id });
   if (!movie) return res.status(400).send("Movie does not exixt.. ");
   res.send(movie);

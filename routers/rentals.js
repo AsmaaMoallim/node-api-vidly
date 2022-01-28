@@ -1,3 +1,4 @@
+const auth = require("../middlewares/auth");
 const mongoose = require("mongoose");
 const exprees = require("express");
 const { Movie } = require("../models/movie");
@@ -6,10 +7,8 @@ const { Rental, validate } = require("../models/rental");
 const router = exprees.Router();
 const Fawn = require("fawn");
 
-
-Fawn.init("mongodb://localhost/vidly");  // this is the new way of initilising 
+Fawn.init("mongodb://localhost/vidly"); // this is the new way of initilising
 // Fawn.init(mongoose); // for handelling transictions
-
 
 // get all method
 router.get("/", async (req, res) => {
@@ -27,7 +26,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // post method
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = await validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -81,7 +80,7 @@ router.post("/", async (req, res) => {
 });
 
 // put method
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { error } = await validate(req.body);
   if (error) return res.status(400).send("Rental does not exixt.. ");
 
@@ -115,7 +114,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // delete  method
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   const rental = await Rental.findByIdAndRemove({ _id: req.params.id });
   if (!rental) return res.status(400).send("Rental does not exixt.. ");
   res.send(rental);
