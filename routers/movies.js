@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 // get one method
 router.get("/:id", async (req, res) => {
   const movie = await Movie.findById(req.params.id);
-  if (!movie) return res.status(400).send("Movie does not exixt.. ");
+  if (!movie ) return res.status(400).send("Movie does not exixt.. ");
   res.send(movie);
 });
 

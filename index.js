@@ -6,6 +6,7 @@ const genres = require("./routers/genres");
 const customers = require("./routers/customers");
 const movies = require("./routers/movies");
 const rentals = require("./routers/rentals");
+const users = require("./routers/users");
 const app = express();
 const mongoose = require("mongoose");
 
@@ -24,6 +25,7 @@ app.use("/vidly.com/api/genres", genres);
 app.use("/vidly.com/api/customer", customers);
 app.use("/vidly.com/api/movies", movies);
 app.use("/vidly.com/api/rentals", rentals);
+app.use("/vidly.com/api/users", users);
 
 // listening to port
 const port = process.env.PORT || 5000;

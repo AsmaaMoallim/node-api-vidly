@@ -6,14 +6,17 @@ const router = express.Router();
 // get method all
 router.get("/", async (req, res) => {
   const customers = await Customer.find().sort("name");
-  if (!customers) return res.status(404).send("No Customers exixt.. ");
+  if (!customers || customers.length == 0)
+    return res.status(404).send("No Customers exixt.. ");
+
   res.send(customers);
 });
 
 // get method one
 router.get("/:id", async (req, res) => {
   const customer = await Customer.find({ _id: req.params.id });
-  if (!customer || customer.length==0) return res.status(404).send("Customer does not exixt.. ");
+  if (!customer || customer.length == 0)
+    return res.status(404).send("Customer does not exixt.. ");
   res.send(customer);
 });
 

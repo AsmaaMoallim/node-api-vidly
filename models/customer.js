@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 
 // Customer document schema
-const customerSchema = mongoose.Schema({
+const customerSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
