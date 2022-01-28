@@ -51,7 +51,6 @@ const validatePassword = (value) => {
     requirementCount: 2,
   };
   const passError = passwordComplexity(complexityOptions).validate(value);
-  console.log(passError);
   if (passError.error) throw new Error(passError.error.details[0].message);
 
   return;
@@ -59,3 +58,4 @@ const validatePassword = (value) => {
 
 exports.User = User;
 exports.validate = validateUser;
+exports.validatePass = validatePassword;
