@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User, validatePass } = require("../models/user");
 const mongoose = require("mongoose");
@@ -19,7 +20,9 @@ router.post("/", async (req, res) => {
 //   if (!validPass) return res.status(400).send(" Invalid email or password.. ");
   if (!validPass) return res.status(400).send(" Invalid password.. ");
 
-  res.send(true);
+  const token = jwt.sign({_id : user._id}, "jwtSecretKey") // the key should  be an environment variable and obtined in the configuration file.. and not should be stored in the source code just like the database pass word .. or any other secret data 
+  
+  res.send(token);
 });
 
 

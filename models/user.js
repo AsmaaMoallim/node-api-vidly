@@ -56,6 +56,7 @@ const validatePassword = (value) => {
   return;
 };
 
+
 exports.User = User;
 exports.validate = validateUser;
 exports.validatePass = validatePassword;
