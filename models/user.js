@@ -1,3 +1,5 @@
+const config = require("config");
+const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
@@ -24,6 +26,13 @@ const userSchema = new mongoose.Schema({
     require: true,
   },
 });
+
+// this a the shabe of the user object that is modeled
+userSchema.methods.generateUserToken = function () {
+  const token = jwt.sign({ _id: this._id }, config.get("jwtTokenSecret"));
+  return token;
+};
+
 
 const User = mongoose.model("User", userSchema);
 
@@ -55,7 +64,6 @@ const validatePassword = (value) => {
 
   return;
 };
-
 
 exports.User = User;
 exports.validate = validateUser;

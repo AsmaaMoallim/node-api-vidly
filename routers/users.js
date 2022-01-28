@@ -1,9 +1,9 @@
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 const { User, validate } = require("../models/user");
 const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
-const lodash = require("lodash")
+const lodash = require("lodash");
 
 // get method all
 router.get("/", async (req, res) => {
@@ -11,7 +11,6 @@ router.get("/", async (req, res) => {
   if (!users || users.length == 0)
     return res.status(404).send("No users exixt.. ");
   res.send(users);
-
 });
 
 // // get method one
@@ -29,7 +28,6 @@ router.post("/", async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send(" User already registered.. ");
 
-  
   // user = new User({
   //   name: req.body.name,
   //   email: req.body.email,
@@ -38,10 +36,14 @@ router.post("/", async (req, res) => {
 
   user = new User(lodash.pick(req.body, ["name", "email", "password"]));
   user.password = await bcrypt.hash(user.password, 10);
-
   await user.save();
 
-  res.send(lodash.pick(user, ["_id", "name", "email" /*, "password" */]));
+  // const token = jwt.sign({ _id: user._id }, config.get("jwtTokenSecret"));
+  const token = user.generateUserToken();
+
+  res
+    .header("x-auth-token", token)
+    .send(lodash.pick(user, ["_id", "name", "email" /*, "password" */]));
   // res.send({
   //   name : user.name,
   //   email : user.email
