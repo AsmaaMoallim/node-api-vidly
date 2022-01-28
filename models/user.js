@@ -25,11 +25,11 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-async function validateUser(user) {
+function validateUser(user) {
   const userSchema = Joi.object({
     name: Joi.string().min(2).max(255).required(),
     email: Joi.string().email().min(2).max(255).required(),
-    password: Joi.password().required(),
+    password: Joi.string().min(8).max(8).required(),
   });
   return userSchema.validate(user);
 }
