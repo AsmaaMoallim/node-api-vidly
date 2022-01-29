@@ -5,16 +5,30 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
+// this function should return a refrence to another function..
+function asyncMiddleware(handler) {
+  return async (req, res, next) => {
+    try {
+      await handler(req, res);
+    } catch (ex) {
+      next(ex); // the error middleware .. passin the exception to it
+    }
+  };
+}
+
+router.get(
+  "/",
+  asyncMiddleware(async (req, res, next) => {
+    // try {
     const genres = await Genre.find().sort("name");
     if (!genres || genres.length == 0)
       return res.status(400).send("No Genres exixt.. ");
     res.send(genres);
-  } catch (ex) {
-    next(ex);   // the error middleware .. passin the exception to it 
-  }
-});
+    // } catch (ex) {
+    //   next(ex); // the error middleware .. passin the exception to it
+    // }
+  })
+);
 
 router.get("/:id", async (req, res) => {
   const genre = await Genre.findById(req.params.id);
