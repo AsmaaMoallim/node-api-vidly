@@ -6,10 +6,14 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const genres = await Genre.find().sort("name");
-  if (!genres || genres.length == 0)
-    return res.status(400).send("No Genres exixt.. ");
-  res.send(genres);
+  try {
+    const genres = await Genre.find().sort("name");
+    if (!genres || genres.length == 0)
+      return res.status(400).send("No Genres exixt.. ");
+    res.send(genres);
+  } catch (ex) {
+    res.status(500).send("something wrong happend!!");
+  }
 });
 
 router.get("/:id", async (req, res) => {
