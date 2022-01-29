@@ -5,14 +5,14 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const genres = await Genre.find().sort("name");
     if (!genres || genres.length == 0)
       return res.status(400).send("No Genres exixt.. ");
     res.send(genres);
   } catch (ex) {
-    res.status(500).send("something wrong happend!!");
+    next(ex);   // the error middleware .. passin the exception to it 
   }
 });
 
