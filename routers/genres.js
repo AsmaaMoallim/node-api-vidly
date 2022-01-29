@@ -1,20 +1,10 @@
 const admin = require("../middlewares/admin");
+const asyncMiddleware = require("../middlewares/aync");
 const auth = require("../middlewares/auth");
 const { Genre, validate } = require("../models/genre");
 const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
-
-// this function should return a refrence to another function..
-function asyncMiddleware(handler) {
-  return async (req, res, next) => {
-    try {
-      await handler(req, res);
-    } catch (ex) {
-      next(ex); // the error middleware .. passin the exception to it
-    }
-  };
-}
 
 router.get(
   "/",
@@ -30,14 +20,14 @@ router.get(
   })
 );
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", asyncMiddleware(async (req, res) => {
   const genre = await Genre.findById(req.params.id);
 
   if (!genre)
     return res.status(404).send("The genre with the given ID was not found.");
 
   res.send(genre);
-});
+}));
 
 router.post(
   "/",
