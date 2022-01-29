@@ -6,28 +6,43 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 
-router.get(
-  "/",
-  asyncMiddleware(async (req, res, next) => {
-    // try {
-    const genres = await Genre.find().sort("name");
-    if (!genres || genres.length == 0)
-      return res.status(400).send("No Genres exixt.. ");
-    res.send(genres);
-    // } catch (ex) {
-    //   next(ex); // the error middleware .. passin the exception to it
-    // }
-  })
-);
+router.get("/", async (req, res, next) => {
+  // just for testing winston
+  throw new Error("Oppos! did not get the genres.. ");
 
-router.get("/:id", asyncMiddleware(async (req, res) => {
+  // try {
+  const genres = await Genre.find().sort("name");
+  if (!genres || genres.length == 0)
+    return res.status(400).send("No Genres exixt.. ");
+  res.send(genres);
+  // } catch (ex) {
+  //   next(ex); // the error middleware .. passin the exception to it
+  // }
+});
+
+// router.get(
+//   "/",
+//   asyncMiddleware(async (req, res, next) => {
+//     // try {
+//     const genres = await Genre.find().sort("name");
+//     if (!genres || genres.length == 0)
+//       return res.status(400).send("No Genres exixt.. ");
+//     res.send(genres);
+//     // } catch (ex) {
+//     //   next(ex); // the error middleware .. passin the exception to it
+//     // }
+//   })
+// );
+
+router.get("/:id", async (req, res) => {
+
   const genre = await Genre.findById(req.params.id);
 
   if (!genre)
     return res.status(404).send("The genre with the given ID was not found.");
 
   res.send(genre);
-}));
+});
 
 router.post(
   "/",
