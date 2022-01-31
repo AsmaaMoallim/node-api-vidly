@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   // just for testing winston
-  throw new Error("Oppos! did not get the genres.. ");
+  // throw new Error("Oppos! did not get the genres.. ");
 
   // try {
   const genres = await Genre.find().sort("name");

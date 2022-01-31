@@ -10,7 +10,9 @@ require("./startup/db")();
 
 // listening to port
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   // console.log(`Listening to port ${port}`);
-  logger.info(`Listening to port ${port}`);  // use winiston rather than consol log
+  logger.info(`Listening to port ${port}`); // use winiston rather than consol log
 });
+
+module.exports = server;

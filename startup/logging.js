@@ -2,15 +2,15 @@ require("express-async-errors"); // it wraps every router called with a next ...
 // the logging of errors
 const winston = require("winston");
 // after requiring winston
-require("winston-mongodb");
+// require("winston-mongodb");
 
 const logger = winston.createLogger({
   // level: process.env.LOG_LEVEL || "info",
   format: winston.format.json(),
   transports: [
     new winston.transports.Console({ colorize: true, prettyPrint: true }),
-    new winston.transports.File({ filename: "myLogginFile.json" }),
-    new winston.transports.MongoDB({ db: "mongodb://localhost/vidly" }),
+    new winston.transports.File({ filename: "myLogginFile" })
+    // new winston.transports.MongoDB({ db: "mongodb://localhost/vidly" }),
   ],
   exceptionHandlers: [
     new winston.transports.File({ filename: "exception.log" }),
