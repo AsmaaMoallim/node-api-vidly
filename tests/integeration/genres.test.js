@@ -13,19 +13,17 @@ describe("/api/geners", () => {
 
   describe("GET / ", () => {
     it("should return all genres", async () => {
-        await Genre.collection.insertMany([
-          { name: "Genre1" },
-          { name: "Genre2" },
-          { name: "Genre3" }
-        ]);
+      await Genre.collection.insertMany([
+        { name: "Genre1" },
+        { name: "Genre2" },
+        { name: "Genre3" },
+      ]);
       const res = await request(server).get("/vidly.com/api/genres"); //maybe is theis one
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(3);
-    //   expect(
-    //     res.body.some((g) => {
-    //       g.name === "Genre1";
-    //     })
-    //   ).toBeTruthy();
+      expect(res.body.some((g) => g.name === "Genre1")).toBeTruthy();
+      expect(res.body.some((g) => g.name === "Genre2")).toBeTruthy();
+      expect(res.body.some((g) => g.name === "Genre3")).toBeTruthy();
     });
   });
 });
