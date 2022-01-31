@@ -26,4 +26,20 @@ describe("/api/geners", () => {
       expect(res.body.some((g) => g.name === "Genre3")).toBeTruthy();
     });
   });
+  describe("GET /:id ", () => {
+    it("should return one genre", async () => {
+      const genre = new Genre({
+        name: "Genre1",
+      });
+      await genre.save();
+
+      //   await Genre.collection.insertOne(genre);
+
+      const res = await request(server).get(
+        `/vidly.com/api/genres/${genre._id}`
+      ); //maybe is theis one
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty("name", genre.name);
+    });
+  });
 });
