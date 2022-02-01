@@ -154,4 +154,63 @@ describe("/api/geners", () => {
       expect(res.body).toHaveProperty("name", name);
     });
   });
+
+  describe("Delete /", () => {
+    let id;
+    let token;
+
+    const exce = () => {
+      return request(server)
+        .delete(`/vidly.com/api/genres/${id}`)
+        .set("x-auth-token", token)
+        .send();
+    };
+
+    beforeEach(() => {
+      id = mongoose.Types.ObjectId();
+      token = new User({ isAdmin: true }).generateUserToken();
+    });
+
+    it("should return 401 if user is not authorized", async () => {
+      token = "";
+      const res = await exce();
+      expect(res.status).toBe(401);
+    });
+
+    it("should return 403 if user not admin", async () => {
+      token = new User({ isAdmin: false }).generateUserToken();
+      const res = await exce();
+      expect(res.status).toBe(403);
+    });
+
+    it("should return 404 if id is not valid", async () => {
+      id = "123";
+      const res = await exce();
+      expect(res.status).toBe(404);
+    });
+
+    it("should return 404 if genre Id does not exist", async () => {
+      const res = await exce();
+      expect(res.status).toBe(404);
+    });
+    it("should return the genere in the response", async () => {
+      const genre = new Genre({ name: "Genre1" });
+      await genre.save();
+
+      id = genre._id;
+
+      const res = await exce();
+      expect(res.body).toHaveProperty("_id");
+      expect(res.body).toHaveProperty("name", "Genre1");
+    });
+
+    it("should delete genre from the data base", async () => {
+      const genre = new Genre({ name: "Genre1" });
+      await genre.save();
+      id = genre._id;
+      await exce();
+      const res = Genre.findById(id);
+      expect(res.body).toBeFalsy();
+    });
+  });
 });

@@ -78,7 +78,7 @@ router.put("/:id", auth, validateObjectId, async (req, res) => {
   res.send(genre);
 });
 
-router.delete("/:id", auth, admin, async (req, res) => {
+router.delete("/:id", auth, admin, validateObjectId, async (req, res) => {
   try {
     const genre = await Genre.findByIdAndRemove({
       _id: req.params.id,
