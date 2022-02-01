@@ -9,7 +9,7 @@ module.exports = (err, req, res, next) => {
   // winston.debug();     //next   debugging information 
   // winston.silly();     //next
 
-  winston.error(err );
+  winston.error(err);
 
   res.status(500).send("something wrong happend!!!");
 };

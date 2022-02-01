@@ -9,7 +9,7 @@ const logger = winston.createLogger({
   format: winston.format.json(),
   transports: [
     new winston.transports.Console({ colorize: true, prettyPrint: true }),
-    new winston.transports.File({ filename: "myLogginFile" })
+    new winston.transports.File({ filename: "myLogginFile" }),
     // new winston.transports.MongoDB({ db: "mongodb://localhost/vidly" }),
   ],
   exceptionHandlers: [

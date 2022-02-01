@@ -8,7 +8,7 @@ describe("/api/geners", () => {
   });
   afterEach(async () => {
     server.close();
-    await Genre.remove();
+    await Genre.remove({}); 
   });
 
   describe("GET / ", () => {
@@ -40,6 +40,11 @@ describe("/api/geners", () => {
       ); //maybe is theis one
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty("name", genre.name);
+    });
+
+    it("should return 404 if id not valid ", async () => {
+      const res = await request(server).get("/vidly.com/api/genres/1"); 
+      expect(res.status).toBe(404);
     });
   });
 });
