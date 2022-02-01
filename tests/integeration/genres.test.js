@@ -1,5 +1,7 @@
+const jwt = require("jsonwebtoken");
 const request = require("supertest"); // this return a function that we call a requet
 const { Genre } = require("../../models/genre");
+const { User } = require("../../models/user");
 let server;
 
 describe("/api/geners", () => {
@@ -8,7 +10,7 @@ describe("/api/geners", () => {
   });
   afterEach(async () => {
     server.close();
-    await Genre.remove({}); 
+    await Genre.remove({});
   });
 
   describe("GET / ", () => {
@@ -43,8 +45,62 @@ describe("/api/geners", () => {
     });
 
     it("should return 404 if id not valid ", async () => {
-      const res = await request(server).get("/vidly.com/api/genres/1"); 
+      const res = await request(server).get("/vidly.com/api/genres/1");
       expect(res.status).toBe(404);
+    });
+  });
+  describe("Post /", () => {
+    it("should return a 401 if user not authorised ", async () => {
+      const res = await request(server)
+        .post("/vidly.com/api/genres")
+        .send({ name: "genre1" });
+      expect(res.status).toBe(401);
+    });
+    // we need to first log in to send a genre
+    it("should return a 400 if req body is not valid (less than 3 characters)", async () => {
+      //// This is correct but no need to repeat it .. we already have a function that already do that
+      // const payload = { _id: mongoose.Types.ObjectId, nema: "aa" };
+      // const token = jwt.sign(payload, "secret");
+
+      const token = new User().generateUserToken();
+
+      const res = await request(server)
+        .post("/vidly.com/api/genres")
+        .set("x-auth-token", token)
+        .send({ name: "123" });
+      expect(res.status).toBe(400);
+    });
+    it("should return a 400 if req body is not valid (greater than 50  characters)", async () => {
+      const token = new User().generateUserToken();
+
+      genrename = new Array(52).join("a");
+      const res = await request(server)
+        .post("/vidly.com/api/genres")
+        .set("x-auth-token", token)
+        .send({ name: genrename });
+      expect(res.status).toBe(400);
+    });
+    it("should save the genre if valid", async () => {
+      const token = new User().generateUserToken();
+
+      const res = await request(server)
+        .post("/vidly.com/api/genres")
+        .set("x-auth-token", token)
+        .send({ name: "Genre1" });
+
+      const genre = await Genre.find({ name: "Genre1" });
+      expect(genre).not.toBeNull();
+    });
+    it("should return the genre if valid", async () => {
+      const token = new User().generateUserToken();
+
+      const res = await request(server)
+        .post("/vidly.com/api/genres")
+        .set("x-auth-token", token)
+        .send({ name: "Genre1" });
+
+      expect(res.body).toHaveProperty("_id");
+      expect(res.body).toHaveProperty("name", "Genre1");
     });
   });
 });
