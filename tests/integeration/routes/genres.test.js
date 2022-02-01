@@ -52,7 +52,7 @@ describe("/api/geners", () => {
     });
 
     it("should return 404 if id is not a valid genre ", async () => {
-      const validId = mongoose.Types.ObjectId()    
+      const validId = mongoose.Types.ObjectId();
       const res = await request(server).get(`/vidly.com/api/genres/${validId}`);
       expect(res.status).toBe(404);
     });
@@ -102,6 +102,55 @@ describe("/api/geners", () => {
       const res = await exce();
       expect(res.body).toHaveProperty("_id");
       expect(res.body).toHaveProperty("name", "Genre1");
+    });
+  });
+
+  describe("Put /", () => {
+    let id;
+    let token;
+    let name;
+
+    const exce = () => {
+      return request(server)
+        .put(`/vidly.com/api/genres/${id}`)
+        .set("x-auth-token", token)
+        .send({ name });
+    };
+
+    beforeEach(() => {
+      id = mongoose.Types.ObjectId();
+      token = new User().generateUserToken();
+      name = "Genre1";
+    });
+
+    it("should return 401 if user is not authorized", async () => {
+      token = "";
+      const res = await exce();
+      expect(res.status).toBe(401);
+    });
+
+    it("should return 404 if id is not valid", async () => {
+      id = "123";
+      const res = await exce();
+      expect(res.status).toBe(404);
+    });
+
+    it("should return 400 if req.body is not valid", async () => {
+      name = "Ge";
+      const res = await exce();
+      expect(res.status).toBe(400);
+    });
+    it("should return 404 if genre Id does not exist", async () => {
+      const res = await exce();
+      expect(res.status).toBe(404);
+    });
+    it("should return the genere in the response", async () => {
+      const genre = new Genre({ name });
+      await genre.save();
+      id = genre._id;
+      const res = await exce();
+      expect(res.body).toHaveProperty("_id");
+      expect(res.body).toHaveProperty("name", genre.name);
     });
   });
 });
