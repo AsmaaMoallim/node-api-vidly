@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
 const request = require("supertest"); // this return a function that we call a requet
-const { Genre } = require("../../models/genre");
-const { User } = require("../../models/user");
+const { Genre } = require("../../../models/genre");
+const { User } = require("../../../models/user");
 let server;
 
 describe("/api/geners", () => {
   beforeEach(() => {
-    server = require("../../index");
+    server = require("../../../index");
   });
   afterEach(async () => {
     server.close();
