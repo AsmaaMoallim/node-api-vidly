@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const request = require("supertest"); // this return a function that we call a requet
 const { Genre } = require("../../../models/genre");
 const { User } = require("../../../models/user");
@@ -47,6 +48,12 @@ describe("/api/geners", () => {
 
     it("should return 404 if id not valid ", async () => {
       const res = await request(server).get("/vidly.com/api/genres/1");
+      expect(res.status).toBe(404);
+    });
+
+    it("should return 404 if id is not a valid genre ", async () => {
+      const validId = mongoose.Types.ObjectId()    
+      const res = await request(server).get(`/vidly.com/api/genres/${validId}`);
       expect(res.status).toBe(404);
     });
   });
