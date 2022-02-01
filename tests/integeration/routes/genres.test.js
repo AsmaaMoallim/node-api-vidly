@@ -148,9 +148,10 @@ describe("/api/geners", () => {
       const genre = new Genre({ name });
       await genre.save();
       id = genre._id;
+      name = "updated";
       const res = await exce();
       expect(res.body).toHaveProperty("_id");
-      expect(res.body).toHaveProperty("name", genre.name);
+      expect(res.body).toHaveProperty("name", name);
     });
   });
 });
