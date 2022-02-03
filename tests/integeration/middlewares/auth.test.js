@@ -1,3 +1,4 @@
+const { after } = require("lodash");
 const request = require("supertest");
 const { Genre } = require("../../../models/genre");
 const { User } = require("../../../models/user");
@@ -7,11 +8,15 @@ describe("auth middleware POST", () => {
     server = require("../../../index");
   });
   afterEach(async () => {
-    server.close();
     await Genre.remove({});
+    server.close();
   });
 
+  afterAll(async () => {
+    await server.close();
+  });
   let token;
+  
   const exec = async () => {
     return await request(server)
       .post("/vidly.com/api/genres/")

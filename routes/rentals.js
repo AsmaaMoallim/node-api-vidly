@@ -10,20 +10,20 @@ const Fawn = require("fawn");
 Fawn.init("mongodb://localhost/vidly"); // this is the new way of initilising
 // Fawn.init(mongoose); // for handelling transictions
 
-// get all method
-router.get("/", async (req, res) => {
-  const rentals = await Rental.find();
-  if (!rentals || rentals.length == 0)
-    return res.status(400).send("No Rentals exixt.. ");
-  res.send(rentals);
-});
+// // get all method
+// router.get("/", async (req, res) => {
+//   const rentals = await Rental.find();
+//   if (!rentals || rentals.length == 0)
+//     return res.status(400).send("No Rentals exixt.. ");
+//   res.send(rentals);
+// });
 
-// get one method
-router.get("/:id", async (req, res) => {
-  const rental = await Rental.findById(req.params.id);
-  if (!rental) return res.status(400).send("Rental does not exixt.. ");
-  res.send(rental);
-});
+// // get one method
+// router.get("/:id", async (req, res) => {
+//   const rental = await Rental.findById(req.params.id);
+//   if (!rental) return res.status(400).send("Rental does not exixt.. ");
+//   res.send(rental);
+// });
 
 // post method
 router.post("/", auth, async (req, res) => {
@@ -79,45 +79,45 @@ router.post("/", auth, async (req, res) => {
   */
 });
 
-// put method
-router.put("/:id", auth, async (req, res) => {
-  const { error } = await validate(req.body);
-  if (error) return res.status(400).send("Rental does not exixt.. ");
+// // put method
+// router.put("/:id", auth, async (req, res) => {
+//   const { error } = await validate(req.body);
+//   if (error) return res.status(400).send("Rental does not exixt.. ");
 
-  // make sure the customer id is an actual one ... in the genre collection
-  const customer = await Customer.findById(req.body.customerId);
-  if (!customer) return res.status(400).send("invalid customer...");
+//   // make sure the customer id is an actual one ... in the genre collection
+//   const customer = await Customer.findById(req.body.customerId);
+//   if (!customer) return res.status(400).send("invalid customer...");
 
-  // make sure the movie id is an actual one ... in the genre collection
-  const movie = await Movie.findById(req.body.movieId);
-  if (!movie) return res.status(400).send("invalid movie...");
+//   // make sure the movie id is an actual one ... in the genre collection
+//   const movie = await Movie.findById(req.body.movieId);
+//   if (!movie) return res.status(400).send("invalid movie...");
 
-  const rental = await Rental.findByIdAndUpdate(
-    { _id: id },
-    {
-      customer: {
-        _id: customer._id,
-        name: customer.name,
-        phone: customer.phone,
-      },
-      movie: {
-        _id: movie._id,
-        title: movie.title,
-        dailyRentalRate: movie.dailyRentalRate,
-      },
-    },
-    { new: true }
-  );
+//   const rental = await Rental.findByIdAndUpdate(
+//     { _id: id },
+//     {
+//       customer: {
+//         _id: customer._id,
+//         name: customer.name,
+//         phone: customer.phone,
+//       },
+//       movie: {
+//         _id: movie._id,
+//         title: movie.title,
+//         dailyRentalRate: movie.dailyRentalRate,
+//       },
+//     },
+//     { new: true }
+//   );
 
-  if (!rental) return res.status(400).send("Some Error occured");
-  res.send(rental);
-});
+//   if (!rental) return res.status(400).send("Some Error occured");
+//   res.send(rental);
+// });
 
-// delete  method
-router.delete("/:id", auth, async (req, res) => {
-  const rental = await Rental.findByIdAndRemove({ _id: req.params.id });
-  if (!rental) return res.status(400).send("Rental does not exixt.. ");
-  res.send(rental);
-});
+// // delete  method
+// router.delete("/:id", auth, async (req, res) => {
+//   const rental = await Rental.findByIdAndRemove({ _id: req.params.id });
+//   if (!rental) return res.status(400).send("Rental does not exixt.. ");
+//   res.send(rental);
+// });
 
 module.exports = router;

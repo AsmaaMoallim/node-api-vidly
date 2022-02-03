@@ -3,18 +3,25 @@ const mongoose = require("mongoose");
 const request = require("supertest"); // this return a function that we call a requet
 const { Genre } = require("../../../models/genre");
 const { User } = require("../../../models/user");
-let server;
 
 describe("/api/geners", () => {
+  let server;
+
   beforeEach(() => {
     server = require("../../../index");
   });
   afterEach(async () => {
-    server.close();
     await Genre.remove({});
+    await server.close();
   });
 
+  afterAll(async () => {
+    await server.close();
+  });
   describe("GET / ", () => {
+    afterAll(async () => {
+      await server.close();
+    });
     it("should return all genres", async () => {
       await Genre.collection.insertMany([
         { name: "Genre1" },
