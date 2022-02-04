@@ -1,5 +1,5 @@
 {
     "jwtTokenSecret" : "jwtTokenSecret",
-    "db" : "vidlydDb"
+    "db" : "vidlyDb"
  
 }
