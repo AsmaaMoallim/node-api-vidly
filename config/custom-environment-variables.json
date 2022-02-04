@@ -1,3 +1,5 @@
 {
-    "jwtTokenSecret" : "jwtTokenSecret" 
+    "jwtTokenSecret" : "jwtTokenSecret",
+    "db" : "vidlydDb"
+ 
 }
