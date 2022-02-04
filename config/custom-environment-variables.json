@@ -1,5 +1,4 @@
 {
     "jwtTokenSecret" : "jwtTokenSecret",
     "db" : "MONGODB_URI"
- 
 }
