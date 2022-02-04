@@ -7,6 +7,7 @@ const { logger } = require("./startup/logging");
 require("./startup/validation")();
 require("./startup/routes")(app);
 require("./startup/db")();
+require("./startup/prod")(app);
 
 // listening to port
 const port = process.env.PORT || 5000;
