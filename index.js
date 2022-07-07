@@ -1,6 +1,11 @@
 const express = require("express");
 // const winston = require("winston");
 const app = express();
+
+// enable cross origin resource sharing
+const cors = require("cors");
+app.use(cors());
+
 require("./startup/config")();
 // const { fun } = require("./startup/logging")();
 const { logger } = require("./startup/logging");
@@ -8,6 +13,7 @@ require("./startup/validation")();
 require("./startup/routes")(app);
 require("./startup/db")();
 require("./startup/prod")(app);
+
 
 // listening to port
 const port = process.env.PORT || 5000;
