@@ -1,4 +1,6 @@
 {
-    "jwtTokenSecret" : "" ,
-    "db" : "mongodb://localhost/vidly"
+    "jwtTokenSecret" : "123" ,
+    "db" : "mongodb://localhost/vidly",
+      "requiresAuth": false
+
 }
