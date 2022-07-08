@@ -4,7 +4,12 @@ const app = express();
 
 // enable cross origin resource sharing
 const cors = require("cors");
-app.use(cors());
+
+const corsOptions = {
+  exposedHeaders: "x-auth-token",
+};
+
+app.use(cors(corsOptions));
 
 require("./startup/config")();
 // const { fun } = require("./startup/logging")();

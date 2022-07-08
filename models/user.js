@@ -26,9 +26,9 @@ const userSchema = new mongoose.Schema({
     maxlength: 1024,
     require: true,
   },
-  isAdmin : {
+  isAdmin: {
     type: Boolean,
-    default : false
+    default: false,
   },
 });
 
@@ -40,7 +40,6 @@ userSchema.methods.generateUserToken = function () {
   );
   return token;
 };
-
 
 const User = mongoose.model("User", userSchema);
 
@@ -60,13 +59,13 @@ function validateUser(user) {
 
 const validatePassword = (value) => {
   const complexityOptions = {
-    min: 10,
+    min: 8,
     max: 30,
-    lowerCase: 3,
-    upperCase: 2,
-    numeric: 1,
-    symbol: 1,
-    requirementCount: 2,
+    // lowerCase: 3,
+    // upperCase: 2,
+    // numeric: 1,
+    // symbol: 1,
+    // requirementCount: 2,
   };
   const passError = passwordComplexity(complexityOptions).validate(value);
   if (passError.error) throw new Error(passError.error.details[0].message);
