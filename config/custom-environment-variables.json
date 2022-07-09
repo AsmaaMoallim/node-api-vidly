@@ -1,4 +1,4 @@
 {
     "jwtTokenSecret" : "jwtTokenSecret",
-    "db" : "MONGODB_URI"
+    "db" : "VIDLY_DB"
 }
