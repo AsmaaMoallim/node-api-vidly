@@ -2,7 +2,7 @@ const { logger } = require("./logging");
 const mongoose = require("mongoose");
 const config = require("config");
 module.exports = function () {
-  db = config.get("db");
+  db = process.env.MONGODB_URI || config.get("db");
   // coonnecting to the mongodb
   mongoose
     .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
