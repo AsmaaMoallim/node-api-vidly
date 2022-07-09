@@ -62,7 +62,7 @@ const validatePassword = (value) => {
     min: 8,
     max: 30,
     // lowerCase: 3,
-    // upperCase: 2,
+    // upperCase: 2, 
     // numeric: 1,
     // symbol: 1,
     // requirementCount: 2,

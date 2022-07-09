@@ -1,4 +1,5 @@
 const auth = require("../middlewares/auth");
+const admin = require("../middlewares/admin")
 const mongoose = require("mongoose");
 const exprees = require("express");
 const { Movie, validate } = require("../models/movie");
@@ -74,7 +75,7 @@ router.put("/:id", auth, async (req, res) => {
 });
 
 // delete  method
-router.delete("/:id", auth, async (req, res) => {
+router.delete("/:id", auth, admin, async (req, res) => {
   const movie = await Movie.findByIdAndRemove({ _id: req.params.id });
   if (!movie) return res.status(400).send("Movie does not exixt.. ");
   res.send(movie);
